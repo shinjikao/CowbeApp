@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">靠北社團</string>
+    <string name="action_settings">Settings</string>
+    <string name="filter">Filter</string>
+    <string name="facebook_app_id">1767148956849631</string>
+    <string name="placeholder_lorem_ipsum">Lorem ipsum dolor set it</string>
+
+
+    <string name="LoginFacebook">請登入Facebook帳號</string>
+    <string name="Login">登入</string>
+    <string name="Logout">登出</string>
+    <string name="Read_me">使用說明</string>
+    <string name="Rate_it">給予支持</string>
+
+    <string-array name="fb_permission">
+
+        <item>public_profile</item>
+        <item>user_friends</item>
+        <item>email</item>
+        <item>user_about_me</item>
+        <item>user_actions.books</item>
+        <item>user_actions.fitness</item>
+        <item>user_actions.music</item>
+        <item>user_actions.news</item>
+        <item>user_actions.video</item>
+        <item>user_actions:{app_namespace}</item>
+        <item>user_birthday</item>
+        <item>user_education_history</item>
+        <item>user_events</item>
+        <item>user_games_activity</item>
+        <item>user_hometown</item>
+        <item>user_likes</item>
+        <item>user_location</item>
+        <item>user_managed_groups</item>
+        <item>user_photos</item>
+        <item>user_posts</item>
+        <item>user_relationships</item>
+        <item>user_relationship_details</item>
+        <item>user_religion_politics</item>
+        <item>user_tagged_places</item>
+        <item>user_videos</item>
+        <item>user_website</item>
+        <item>user_work_history</item>
+        <item>read_custom_friendlists</item>
+        <item>read_insights</item>
+        <item>read_audience_network_insights</item>
+        <item>read_page_mailboxes</item>
+        <item>manage_pages</item>
+        <item>publish_pages</item>
+        <item>publish_actions</item>
+        <item>rsvp_event</item>
+        <item>pages_show_list</item>
+        <item>pages_manage_cta</item>
+        <item>ads_read</item>
+        <item>ads_management</item>
+
+
+    </string-array>
+    <string-array name="cowbaband">
+        <item>KaoBeiJoke</item>
+        <item>kobeengineer</item>
+        <item>287527004749149</item>
+        <item>1415333978752489</item>
+        <item>cowbeistartups</item>
+        <item>kboutk</item>
+        <item>kaobeihusband</item>
+        <item>kaobeiwife</item>
+        <item>complainBoyfriend</item>
+        <item>cowbaymotherinlaw</item>
+        <item>cowacc</item>
+        <item>1507004499528332</item>
+        <item>kaobeiTDE</item>
+        <item>helldamnboss</item>
+        <item>cowbalien</item>
+        <item>lovesextop</item>
+        <item>kaobeiyou</item>
+        <item>cowbanursing</item>
+        <item>903473626385697</item>
+        <item>563212453789705</item>
+        <item>kobeencrew</item>
+        <item>kaobeiM</item>
+        <item>565474926929135</item>
+        <item>770903896289213</item>
+        <item>374097612788175</item>
+        <item>1560255214192865</item>
+        <item>youk8</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>
