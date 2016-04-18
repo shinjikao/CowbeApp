@@ -1,0 +1,88 @@
+[
+    {
+        "outputFile": "/Users/jackalkao/CowbeApp/bottomsheet-commons/build/intermediates/res/merged/androidTest/debug/values-sw600dp-v13/values-sw600dp-v13.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 50,
+                    "endOffset": 101
+                },
+                "from": {
+                    "file": "/Users/jackalkao/CowbeApp/bottomsheet-commons/build/intermediates/exploded-aar/CowbeApp/bottomsheet/unspecified/res/values-sw600dp-v13/values-sw600dp-v13.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 50,
+                        "endOffset": 101
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 106,
+                    "endColumn": 63,
+                    "endOffset": 165
+                },
+                "from": {
+                    "file": "/Users/jackalkao/CowbeApp/bottomsheet-commons/build/intermediates/exploded-aar/CowbeApp/bottomsheet/unspecified/res/values-sw600dp-v13/values-sw600dp-v13.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 106,
+                        "endColumn": 63,
+                        "endOffset": 165
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "outputFile": "/Users/jackalkao/2016APP/bottomsheet/bottomsheet-commons/build/intermediates/res/merged/androidTest/debug/values-sw600dp-v13/values-sw600dp-v13.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 50,
+                    "endOffset": 101
+                },
+                "from": {
+                    "file": "/Users/jackalkao/2016APP/bottomsheet/bottomsheet-commons/build/intermediates/exploded-aar/bottomsheet/bottomsheet/unspecified/res/values-sw600dp-v13/values-sw600dp-v13.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 50,
+                        "endOffset": 101
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 106,
+                    "endColumn": 63,
+                    "endOffset": 165
+                },
+                "from": {
+                    "file": "/Users/jackalkao/2016APP/bottomsheet/bottomsheet-commons/build/intermediates/exploded-aar/bottomsheet/bottomsheet/unspecified/res/values-sw600dp-v13/values-sw600dp-v13.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 106,
+                        "endColumn": 63,
+                        "endOffset": 165
+                    }
+                }
+            }
+        ]
+    }
+]

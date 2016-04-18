@@ -1,46 +1,36 @@
 package com.jackal.cowbeapp.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.facebook.HttpMethod;
-import com.flipboard.bottomsheet.BottomSheetLayout;
-import com.jackal.cowbeapp.DataModel.Band;
-
-
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-
+import com.facebook.HttpMethod;
+import com.jackal.cowbeapp.DataModel.Band;
 import com.jackal.cowbeapp.Interface.OnLoadMoreListener;
 import com.jackal.cowbeapp.MainActivity;
 import com.jackal.cowbeapp.R;
 import com.jackal.cowbeapp.app.AppController;
-
 import com.jackal.cowbeapp.fragment.BandFeedDetailFragment;
-import com.jackal.cowbeapp.fragment.BandFeedDetailFragment2;
+import com.jackal.cowbeapp.fragment.BandFeedDetailFragmentBottom;
 import com.jackal.cowbeapp.utility.Utility;
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * Created by jackalkao on 2/27/16.
@@ -61,7 +51,7 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
     private int lastVisibleItem, totalItemCount;
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
-
+    public OnItemClickListener mItemClickListener;
 
 
     public BandFeedsAdapter(Context context, ArrayList<Band.Data> feedData) {
@@ -113,27 +103,21 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-       // View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_feed_data, false);
-        //ViewHolder viewHolder = new ViewHolder(itemLayoutView, feedData);
+
         RecyclerView.ViewHolder viewHolder;
 
-        if(viewType ==VIEW_ITEM){
-            View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_feed_data,parent, false);
+        if (viewType == VIEW_ITEM) {
+            View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_feed_data, parent, false);
 
             viewHolder = new ViewHolder(itemLayoutView);
 
-        }
-        else{
-            View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_item,parent, false);
+        } else {
+            View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_item, parent, false);
 
             viewHolder = new ProgressViewHolder(itemLayoutView);
         }
 
-
-        //return viewHolder;
         return viewHolder;
-
-
     }
 
     static String result;
@@ -176,7 +160,7 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
 
-        Band.Data data = (Band.Data)feedData.get(position);
+        Band.Data data = (Band.Data) feedData.get(position);
 
 
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
@@ -188,17 +172,18 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
             String strDate = Utility.FBDateToString(d);
             String url = data.getFullPicture();
             ((ViewHolder) holder).feed_full_picture.setImageUrl(url, imageLoader);
-            ((ViewHolder)holder).feed_message.setText(data.getMessage());
-            ((ViewHolder)holder).feed_date.setText(strDate);
-            ((ViewHolder)holder).feed_likesCount.setText(String.valueOf(data.getLikes().getSummary().getTotalCount()));
-            ((ViewHolder)holder).feed_commentCount.setText(String.valueOf(data.getComments().getSummary().getTotalCount()));
+            ((ViewHolder) holder).feed_message.setText(data.getMessage());
+            ((ViewHolder) holder).feed_date.setText(strDate);
+            ((ViewHolder) holder).feed_likesCount.setText(String.valueOf(data.getLikes().getSummary().getTotalCount()));
+            ((ViewHolder) holder).feed_commentCount.setText(String.valueOf(data.getComments().getSummary().getTotalCount()));
 
-        }else{
-            ((ProgressViewHolder)holder).progressBar.setIndeterminate(true);
+            holder.setIsRecyclable(false);
+        } else {
+            ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
         }
     }
 
-    public void setLoaded(){
+    public void setLoaded() {
         loading = false;
     }
 
@@ -208,12 +193,21 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
         return feedData.size();
     }
 
-    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener){
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position);
+    }
+
+    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
+    }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         NetworkImageView feed_full_picture;
 
@@ -229,12 +223,12 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
 
         TextView feed_commentCount;
 
-        View itemLayoutView2;
+        View mItemLayoutView;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
 
-            this.itemLayoutView2 = itemLayoutView;
+            this.mItemLayoutView = itemLayoutView;
 
             feed_full_picture = (NetworkImageView) itemLayoutView.findViewById(R.id.feed_full_picture);
             feed_message = (TextView) itemLayoutView.findViewById(R.id.feed_message);
@@ -244,20 +238,54 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
 
             feed_likesCount = (TextView) itemLayoutView.findViewById(R.id.feed_likesCount);
             feed_commentCount = (TextView) itemLayoutView.findViewById(R.id.feed_commentCount);
+
+
+            feed_full_picture.setOnClickListener(this);
+            feed_likeIcon.setOnClickListener(this);
+            feed_likesCount.setOnClickListener(this);
+            feed_commentIcon.setOnClickListener(this);
+            feed_commentCount.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            Utility.logStatus("onClick()  v.getId()" + v.getId());
+
+
+            if (mItemClickListener != null) {
+                mItemClickListener.onItemClick(v, getAdapterPosition());
+                if (v.getId() == feed_likeIcon.getId()) {
+                    //Change Text Color
+                    feed_likeIcon.setColor(v.getContext().getResources().getColor(R.color.com_facebook_blue));
+                } else if (v.getId() == feed_commentIcon.getId()) {
+
+                    //Launch Bottom Layout
+                    MainActivity mainActivity = (MainActivity) v.getContext();
+                    BandFeedDetailFragmentBottom.newInstance(feedData.get(getAdapterPosition()).getId())
+                            .show(mainActivity.getSupportFragmentManager(), R.id.bottomsheet);
+                } else if (v.getId() == feed_full_picture.getId()) {
+                    MainActivity mainActivity = (MainActivity) v.getContext();
+                    mainActivity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment, BandFeedDetailFragment.newInstance(feedData.get(getAdapterPosition()).getId(),
+                                    feedData.get(getAdapterPosition()).getFullPicture(),
+                                    feedData.get(getAdapterPosition()).getMessage(), ""))
+                            .addToBackStack("BandDetail")
+                            .commit();
+                }
+
+            }
         }
 
         public void changeLikeIconColor() {
-            Utility.logStatus(String.valueOf("changeLikeIconColor  " + getAdapterPosition()));
-
-            Utility.logStatus(String.valueOf("changeLikeIconColor  " + getLayoutPosition()));
-
-            IconicsImageView btn = (IconicsImageView) itemLayoutView2.findViewById(R.id.feed_likeIcon);
-
-            btn.setColor(itemLayoutView2.getContext().getResources().getColor(R.color.com_facebook_blue));
+            IconicsImageView btn = (IconicsImageView) mItemLayoutView.findViewById(R.id.feed_likeIcon);
+            btn.setColor(mItemLayoutView.getContext().getResources().getColor(R.color.com_facebook_blue));
 
         }
 
     }
+
     public static class ProgressViewHolder extends RecyclerView.ViewHolder {
         public ProgressBar progressBar;
 

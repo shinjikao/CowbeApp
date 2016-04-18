@@ -3,13 +3,16 @@ package com.jackal.cowbeapp.fragment;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -66,30 +69,48 @@ public class MainActivityFragment extends Fragment {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         accessToken=  AccessToken.getCurrentAccessToken();
         startRequest();
+
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+
     }
 
+
+    Toolbar toolBar;
+    protected Toolbar setupToolBar(AppCompatActivity a ) {
+        toolBar = (Toolbar) getView().findViewById(R.id.toolbar);
+        if (toolBar == null) return null;
+        a.setSupportActionBar(toolBar);
+        a.getSupportActionBar().setTitle("XXX");
+        a.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        return toolBar;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        r_view=(RecyclerView) view.findViewById(R.id.r_view);
+        return view;
+    }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setupToolBar((AppCompatActivity) getActivity());
+
+        r_view=(RecyclerView) view.findViewById(R.id.r_view);
 
         bandList = getResources().getStringArray(R.array.cowbaband);
 
         startRequest();
-
-        return view;
     }
-
 
     public static String str2 ;
     public void startRequest(){

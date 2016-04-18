@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/jackalkao/2016APP/bottomsheet/bottomsheet-commons/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/bottomsheet_collections.png",
+        "source": "/Users/jackalkao/2016APP/bottomsheet/bottomsheet-commons/src/main/res/drawable-xxhdpi/bottomsheet_collections.png"
+    },
+    {
+        "merged": "/Users/jackalkao/2016APP/bottomsheet/bottomsheet-commons/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/bottomsheet_camera.png",
+        "source": "/Users/jackalkao/2016APP/bottomsheet/bottomsheet-commons/src/main/res/drawable-xxhdpi/bottomsheet_camera.png"
+    },
+    {
+        "merged": "/Users/jackalkao/CowbeApp/bottomsheet-commons/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/bottomsheet_collections.png",
+        "source": "/Users/jackalkao/CowbeApp/bottomsheet-commons/src/main/res/drawable-xxhdpi/bottomsheet_collections.png"
+    },
+    {
+        "merged": "/Users/jackalkao/CowbeApp/bottomsheet-commons/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/bottomsheet_camera.png",
+        "source": "/Users/jackalkao/CowbeApp/bottomsheet-commons/src/main/res/drawable-xxhdpi/bottomsheet_camera.png"
+    }
+]

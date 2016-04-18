@@ -1,7 +1,7 @@
 package com.jackal.cowbeapp.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 /**
  * Created by jackalkao on 2/24/16.
  */
-public class BandFeedDetailFragment2 extends BottomSheetFragment {
+public class BandFeedDetailFragmentBottom extends BottomSheetFragment {
 
     private ArrayList<Band.Feed> feedComment = new ArrayList();
 
@@ -34,8 +34,8 @@ public class BandFeedDetailFragment2 extends BottomSheetFragment {
 
     private RecyclerView r_feedComment;
 
-    public static BandFeedDetailFragment2 newInstance(String id) {
-        BandFeedDetailFragment2 myFragment = new BandFeedDetailFragment2();
+    public static BandFeedDetailFragmentBottom newInstance(String id) {
+        BandFeedDetailFragmentBottom myFragment = new BandFeedDetailFragmentBottom();
         Bundle args = new Bundle();
         args.putString("ID", id);
         myFragment.setArguments(args);
@@ -93,7 +93,7 @@ public class BandFeedDetailFragment2 extends BottomSheetFragment {
     }
 
     public void setRecyclerView(ArrayList<Comment.Datum> data) {
-        FeedCommentsAdapter adapter = new FeedCommentsAdapter(data);
+        FeedCommentsAdapter adapter = new FeedCommentsAdapter(data,"");
         r_feedComment.setAdapter(adapter);
         r_feedComment.setItemAnimator(new DefaultItemAnimator());
     }

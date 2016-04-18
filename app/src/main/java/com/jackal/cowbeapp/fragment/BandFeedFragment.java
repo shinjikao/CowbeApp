@@ -4,10 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,7 +44,7 @@ public class BandFeedFragment extends Fragment {
 
     private String id;
 
-    private RecyclerView r_bandfeed;
+    private RecyclerView mRecyclerView;
 
     private Band band;
 
@@ -80,9 +82,10 @@ public class BandFeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bandfeed, container, false);
 
-        r_bandfeed = (RecyclerView) view.findViewById(R.id.r_bandfeed);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.r_bandfeed);
 
         bottomSheetLayout = (BottomSheetLayout) view.findViewById(R.id.bottomsheet);
+        bottomSheetLayout.setPeekOnDismiss(true);
 
         return view;
     }
@@ -106,15 +109,15 @@ public class BandFeedFragment extends Fragment {
                     public void onCompleted(GraphResponse response) {
                         try {
                             band = new Gson().fromJson(response.getJSONObject().toString(), Band.class);
-
+                            String Cover = band.getCover().getSource();
 
                             Next = band.getFeed().getPaging().getNext();
                             until = Next.substring(Next.indexOf("until=") + 6).split("&")[0];
                             Utility.logStatus("until " + until);
 
-                            CustomRecyclerView.setLayoutManager(getActivity(), r_bandfeed, "VERTICAL");
+                            CustomRecyclerView.setLayoutManager(getActivity(), mRecyclerView, "VERTICAL");
 
-                            setRecyclerView(band.getFeed().getData(), view);
+                            setRecyclerView(band.getFeed().getData(), view, Cover);
 
 
                         } catch (Exception ex) {
@@ -179,16 +182,15 @@ public class BandFeedFragment extends Fragment {
 
     BandFeedsAdapter adapter;
 
-    public void setRecyclerView(final ArrayList<Band.Data> FeedData, View view) {
+    public void setRecyclerView(final ArrayList<Band.Data> FeedData, View view, final String cover) {
         Data = FeedData;
 
-        adapter = new BandFeedsAdapter(getContext(), FeedData, r_bandfeed);
+        adapter = new BandFeedsAdapter(getContext(), FeedData, mRecyclerView);
 
-        r_bandfeed.setAdapter(adapter);
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setHasFixedSize(true);
 
-        r_bandfeed.setItemAnimator(new DefaultItemAnimator());
-
-        Utility.logStatus(String.valueOf(view.getHeight()));
 
         bottomSheetLayout.setPeekSheetTranslation(view.getHeight() - 200);
 
@@ -203,22 +205,37 @@ public class BandFeedFragment extends Fragment {
             }
         });
 
-        r_bandfeed.addOnItemTouchListener(new RecyclerTouchListener(getContext(), r_bandfeed, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Band.Data data = Data.get(position);
-                Utility.logStatus("r_bandfeed click " + position + "  " + data.getMessage());
-
-                MainActivity mainActivity = (MainActivity) view.getContext();
-                BandFeedDetailFragment2.newInstance(data.getId())
-                        .show(mainActivity.getSupportFragmentManager(), R.id.bottomsheet);
-            }
+        adapter.SetOnItemClickListener(new BandFeedsAdapter.OnItemClickListener() {
 
             @Override
-            public void onLongClick(View view, int position) {
-
+            public void onItemClick(View v, int position) {
+                // do something with position
             }
-        }));
+        });
+//        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), r_bandfeed, new ClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                Band.Data data = Data.get(position);
+//
+//
+//                Utility.logStatus("r_bandfeed click " + position + "  " + data.getMessage());
+//
+//                MainActivity mainActivity = (MainActivity) view.getContext();
+////                BandFeedDetailFragmentBottom.newInstance(data.getId())
+////                        .show(mainActivity.getSupportFragmentManager(), R.id.bottomsheet);
+//
+//
+//                mainActivity.getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.fragment, BandFeedDetailFragment.newInstance(data.getId(), data.getFullPicture(), data.getMessage(), cover))
+//                        .addToBackStack("BandDetail")
+//                        .commit();
+//            }
+//
+//            @Override
+//            public void onLongClick(View view, int position) {
+//
+//            }
+//        }));
 
 
     }

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -23,13 +24,28 @@ import java.util.Date;
 /**
  * Created by jackalkao on 2/27/16.
  */
-public class FeedCommentsAdapter extends RecyclerView.Adapter<FeedCommentsAdapter.ViewHolder> {
+public class FeedCommentsAdapter extends RecyclerView.Adapter {
+    private final int VIEW_HEADER = 0;
+    private final int VIEW_NORMAL = 1;
+    private final int VIEW_FOOTER = 1;
+    private String Message;
 
     private ArrayList<Comment.Datum> CommentsData;
     private Context context;
 
-    public FeedCommentsAdapter(ArrayList<Comment.Datum> CommentsData) {
+
+    public FeedCommentsAdapter(ArrayList<Comment.Datum> CommentsData, String Message) {
         this.CommentsData = CommentsData;
+        this.Message = Message;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        if (position == 0)
+            return VIEW_HEADER;
+        else
+            return VIEW_NORMAL;
 
     }
 
@@ -39,33 +55,47 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<FeedCommentsAdapte
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
-        View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_feed_data_comment, null);
-        ViewHolder viewHolder = new ViewHolder(itemLayoutView, CommentsData);
+        //ViewHolder viewHolder;
+        RecyclerView.ViewHolder viewHolder;
+        if (viewType == VIEW_HEADER) {
+            View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.detail_message, null);
+            viewHolder = new MessageViewHolder(itemLayoutView);
+        } else {
+            View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_feed_data_comment, null);
+            viewHolder = new ViewHolder(itemLayoutView, CommentsData);
+        }
+
+
         return viewHolder;
 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        String url="";
+        if (CommentsData.get(position) != null){
+            url = CommentsData.get(position).getFrom().getPicture().getData().getUrl();
+        }
 
-        String url = CommentsData.get(position).getFrom().getPicture().getData().getUrl();
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
         if (imageLoader == null)
             imageLoader = AppController.getInstance().getImageLoader();
 
-        if (url != "" || url != null) {
-            holder.comment_user_picture.setImageUrl(url, imageLoader);
+        if (holder instanceof ViewHolder) {
+            if (url != "" || url != null) {
+                ((ViewHolder) holder).comment_user_picture.setImageUrl(url, imageLoader);
+            } else {
+                url = "http://iconizer.net/files/Facebook/orig/genericfriendicon.png";
+                ((ViewHolder) holder).comment_user_picture.setImageUrl(url, imageLoader);
+            }
+            ((ViewHolder) holder).comment_name.setText(CommentsData.get(position).getFrom().getName());
+            ((ViewHolder) holder).comment_message.setText(CommentsData.get(position).getMessage());
+            ((ViewHolder) holder).comment_likes.setText(String.valueOf(CommentsData.get(position).getLikeCount()));
         } else {
-            url = "http://iconizer.net/files/Facebook/orig/genericfriendicon.png";
-            holder.comment_user_picture.setImageUrl(url, imageLoader);
+            ((MessageViewHolder) holder).textView.setText(Message);
         }
-
-
-        holder.comment_name.setText(CommentsData.get(position).getFrom().getName());
-        holder.comment_message.setText(CommentsData.get(position).getMessage());
-        holder.comment_likes.setText(String.valueOf(CommentsData.get(position).getLikeCount()));
 
 
     }
@@ -92,7 +122,7 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<FeedCommentsAdapte
             this.CommentsData = CommentsData;
 
 
-            comment_user_picture=(NetworkImageView)itemLayoutView.findViewById(R.id.comment_user_picture);
+            comment_user_picture = (NetworkImageView) itemLayoutView.findViewById(R.id.comment_user_picture);
             comment_name = (TextView) itemLayoutView.findViewById(R.id.comment_name);
             comment_message = (TextView) itemLayoutView.findViewById(R.id.comment_message);
             comment_likes = (TextView) itemLayoutView.findViewById(R.id.comment_likes);
@@ -101,6 +131,17 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter<FeedCommentsAdapte
 
         @Override
         public void onClick(View view) {
+
+        }
+    }
+
+
+    public static class MessageViewHolder extends RecyclerView.ViewHolder {
+        public TextView textView;
+
+        public MessageViewHolder(View v) {
+            super(v);
+            textView = (TextView) v.findViewById(R.id.tv_message);
 
         }
     }

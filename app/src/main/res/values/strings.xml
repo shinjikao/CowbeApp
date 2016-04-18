@@ -12,6 +12,8 @@
     <string name="Read_me">使用說明</string>
     <string name="Rate_it">給予支持</string>
 
+
+    <string name="title_activity_custom_intro">歡迎使用靠北App</string>
     <string-array name="fb_permission">
 
         <item>public_profile</item>
