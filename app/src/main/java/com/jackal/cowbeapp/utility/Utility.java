@@ -14,6 +14,7 @@ public class Utility {
     public static final String TAG = "JACKAL";
 
 
+
     public static void logStatus(String Message) {
         Log.d(Utility.TAG, Message);
     }

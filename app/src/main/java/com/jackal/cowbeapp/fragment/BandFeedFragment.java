@@ -4,34 +4,30 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.flipboard.bottomsheet.BottomSheetLayout;
-
 import com.google.gson.Gson;
-
 import com.jackal.cowbeapp.CustomRecyclerView;
 import com.jackal.cowbeapp.DataModel.Band;
-import com.jackal.cowbeapp.DataModel.FakeFeed;
 import com.jackal.cowbeapp.Interface.OnLoadMoreListener;
 import com.jackal.cowbeapp.MainActivity;
 import com.jackal.cowbeapp.R;
-
 import com.jackal.cowbeapp.adapter.BandFeedsAdapter;
+import com.jackal.cowbeapp.app.AppController;
 import com.jackal.cowbeapp.utility.Utility;
-
 
 import java.util.ArrayList;
 
@@ -57,6 +53,8 @@ public class BandFeedFragment extends Fragment {
 
     private View view;
 
+    private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+
     public static BandFeedFragment newInstance(String id) {
         BandFeedFragment myFragment = new BandFeedFragment();
         Bundle args = new Bundle();
@@ -70,7 +68,6 @@ public class BandFeedFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         this.id = getArguments().getString("ID", "");
-
         Log.d(MainActivity.TAG, id);
 
         super.onCreate(savedInstanceState);
@@ -183,17 +180,15 @@ public class BandFeedFragment extends Fragment {
     BandFeedsAdapter adapter;
 
     public void setRecyclerView(final ArrayList<Band.Data> FeedData, View view, final String cover) {
+
+        NetworkImageView mNetworkImageView = (NetworkImageView)getActivity().findViewById(R.id.feed_cover);
+        mNetworkImageView.setImageUrl(cover,imageLoader);
         Data = FeedData;
-
         adapter = new BandFeedsAdapter(getContext(), FeedData, mRecyclerView);
-
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
-
-
         bottomSheetLayout.setPeekSheetTranslation(view.getHeight() - 200);
-
 
         adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -212,32 +207,6 @@ public class BandFeedFragment extends Fragment {
                 // do something with position
             }
         });
-//        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), r_bandfeed, new ClickListener() {
-//            @Override
-//            public void onClick(View view, int position) {
-//                Band.Data data = Data.get(position);
-//
-//
-//                Utility.logStatus("r_bandfeed click " + position + "  " + data.getMessage());
-//
-//                MainActivity mainActivity = (MainActivity) view.getContext();
-////                BandFeedDetailFragmentBottom.newInstance(data.getId())
-////                        .show(mainActivity.getSupportFragmentManager(), R.id.bottomsheet);
-//
-//
-//                mainActivity.getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.fragment, BandFeedDetailFragment.newInstance(data.getId(), data.getFullPicture(), data.getMessage(), cover))
-//                        .addToBackStack("BandDetail")
-//                        .commit();
-//            }
-//
-//            @Override
-//            public void onLongClick(View view, int position) {
-//
-//            }
-//        }));
-
-
     }
 
     public interface ClickListener {

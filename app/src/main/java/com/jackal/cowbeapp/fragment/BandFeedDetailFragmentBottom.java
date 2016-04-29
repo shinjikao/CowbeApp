@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -17,6 +19,7 @@ import com.google.gson.Gson;
 import com.jackal.cowbeapp.CustomRecyclerView;
 import com.jackal.cowbeapp.DataModel.Band;
 import com.jackal.cowbeapp.DataModel.Comment;
+import com.jackal.cowbeapp.FacebookFunction;
 import com.jackal.cowbeapp.MainActivity;
 import com.jackal.cowbeapp.R;
 import com.jackal.cowbeapp.adapter.FeedCommentsAdapter;
@@ -32,7 +35,9 @@ public class BandFeedDetailFragmentBottom extends BottomSheetFragment {
 
     private String id;
 
-    private RecyclerView r_feedComment;
+    private Button mSubmitComment;
+    private EditText mEditComment;
+    private RecyclerView mRecycViewFeedComment;
 
     public static BandFeedDetailFragmentBottom newInstance(String id) {
         BandFeedDetailFragmentBottom myFragment = new BandFeedDetailFragmentBottom();
@@ -55,14 +60,28 @@ public class BandFeedDetailFragmentBottom extends BottomSheetFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bandfeed, container, false);
+        View view = inflater.inflate(R.layout.fragment_bandfeed_bottom, container, false);
 
-        r_feedComment = (RecyclerView) view.findViewById(R.id.r_bandfeed);
+
+        mEditComment = (EditText) view.findViewById(R.id.user_comment);
+        mSubmitComment = (Button) view.findViewById(R.id.submit_comment);
+        mRecycViewFeedComment = (RecyclerView) view.findViewById(R.id.r_bandfeed);
+
+        mSubmitComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FacebookFunction.PostComment(id , mEditComment.getText().toString() );
+            }
+        });
 
         startRequest();
 
+
+
+
         return view;
     }
+
     public void startRequest() {
 
         GraphRequest request = GraphRequest.newGraphPathRequest(
@@ -72,9 +91,9 @@ public class BandFeedDetailFragmentBottom extends BottomSheetFragment {
                     @Override
                     public void onCompleted(GraphResponse response) {
                         try {
-                            Comment comments = new Gson().fromJson(response.getJSONObject().toString(), Comment .class);
+                            Comment comments = new Gson().fromJson(response.getJSONObject().toString(), Comment.class);
 
-                            CustomRecyclerView.setLayoutManager(getActivity(), r_feedComment, "VERTICAL");
+                            CustomRecyclerView.setLayoutManager(getActivity(), mRecycViewFeedComment, "VERTICAL");
 
                             setRecyclerView(comments.getComments().getData());
                         } catch (Exception ex) {
@@ -93,8 +112,8 @@ public class BandFeedDetailFragmentBottom extends BottomSheetFragment {
     }
 
     public void setRecyclerView(ArrayList<Comment.Datum> data) {
-        FeedCommentsAdapter adapter = new FeedCommentsAdapter(data,"");
-        r_feedComment.setAdapter(adapter);
-        r_feedComment.setItemAnimator(new DefaultItemAnimator());
+        FeedCommentsAdapter adapter = new FeedCommentsAdapter(data, "");
+        mRecycViewFeedComment.setAdapter(adapter);
+        mRecycViewFeedComment.setItemAnimator(new DefaultItemAnimator());
     }
 }

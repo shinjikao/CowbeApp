@@ -7,9 +7,11 @@
     <color name="textPrimary">#212121</color>
 
     <color name="text_primary">#ebeef0</color>
-
-
     <color name="window_background">#FFF5F5F5</color>
 
+
+    <color name="colorGary">#FF9D9D9D</color>
+
+    <color name="colorWhite">#FFFFFFFF</color>
 
 </resources>

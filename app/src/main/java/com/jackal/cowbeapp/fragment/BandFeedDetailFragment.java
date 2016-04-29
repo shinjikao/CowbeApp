@@ -1,6 +1,7 @@
 package com.jackal.cowbeapp.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,8 @@ import com.jackal.cowbeapp.app.AppController;
 
 import java.util.ArrayList;
 
+
+
 /**
  * Created by jackalkao on 2/24/16.
  */
@@ -35,16 +38,17 @@ public class BandFeedDetailFragment extends Fragment {
     private String id;
     private String FullPicture;
     private String Message;
-    private String Cover;
-    private RecyclerView r_feedComment;
 
-    public static BandFeedDetailFragment newInstance(String id , String FullPicture ,String Message ,String Cover) {
+    private RecyclerView r_feedComment;
+    private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+
+    public static BandFeedDetailFragment newInstance(String id, String FullPicture, String Message) {
         BandFeedDetailFragment myFragment = new BandFeedDetailFragment();
         Bundle args = new Bundle();
         args.putString("ID", id);
         args.putString("FULL_PICTURE", FullPicture);
-        args.putString("MESSAGE",Message);
-        args.putString("COVER",Cover);
+        args.putString("MESSAGE", Message);
+
         myFragment.setArguments(args);
 
         return myFragment;
@@ -56,7 +60,7 @@ public class BandFeedDetailFragment extends Fragment {
         this.id = getArguments().getString("ID", "");
         this.FullPicture = getArguments().getString("FULL_PICTURE", "");
         this.Message = getArguments().getString("MESSAGE", "");
-        this.Cover = getArguments().getString("COVER", "");
+
         Log.d(MainActivity.TAG, id);
 
 
@@ -64,29 +68,18 @@ public class BandFeedDetailFragment extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bandfeed_detail, container, false);
-
-        if( !FullPicture.isEmpty() ){
-            ImageLoader imageLoader = AppController.getInstance().getImageLoader();
-            NetworkImageView cover = (NetworkImageView)view.findViewById(R.id.networkImageView);
-            cover.setImageUrl(this.FullPicture, imageLoader);
-        }
-        else{
-            ImageLoader imageLoader = AppController.getInstance().getImageLoader();
-            NetworkImageView cover = (NetworkImageView)view.findViewById(R.id.networkImageView);
-            cover.setImageUrl(this.Cover, imageLoader);
-        }
-
-
         r_feedComment = (RecyclerView) view.findViewById(R.id.r_bandfeed);
+        NetworkImageView mNetworkImageView = (NetworkImageView) getActivity().findViewById(R.id.feed_cover);
+        mNetworkImageView.setImageUrl(this.FullPicture, imageLoader);
         startRequest();
-
-
         return view;
     }
+
     public void startRequest() {
 
         GraphRequest request = GraphRequest.newGraphPathRequest(
@@ -96,11 +89,12 @@ public class BandFeedDetailFragment extends Fragment {
                     @Override
                     public void onCompleted(GraphResponse response) {
                         try {
-                            Comment comments = new Gson().fromJson(response.getJSONObject().toString(), Comment .class);
+                            Comment comments = new Gson().fromJson(response.getJSONObject().toString(), Comment.class);
 
                             CustomRecyclerView.setLayoutManager(getActivity(), r_feedComment, "VERTICAL");
 
-                            setRecyclerView(comments.getComments().getData(),Message);
+                            setRecyclerView(comments.getComments().getData(), Message);
+
                         } catch (Exception ex) {
                             Log.e(MainActivity.TAG, response.toString());
 
@@ -114,13 +108,13 @@ public class BandFeedDetailFragment extends Fragment {
         request.executeAsync();
     }
 
-    public void setRecyclerView(ArrayList<Comment.Datum> data,String Message) {
+    public void setRecyclerView(ArrayList<Comment.Datum> data, String Message) {
 
-        ArrayList<Comment.Datum> mData =new ArrayList<Comment.Datum>();
+        ArrayList<Comment.Datum> mData = new ArrayList<Comment.Datum>();
         mData.add(null);
         mData.addAll(data);
 
-        FeedCommentsAdapter adapter = new FeedCommentsAdapter(mData,Message);
+        FeedCommentsAdapter adapter = new FeedCommentsAdapter(mData, Message);
         r_feedComment.setAdapter(adapter);
         r_feedComment.setItemAnimator(new DefaultItemAnimator());
     }

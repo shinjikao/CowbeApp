@@ -1,6 +1,7 @@
 package com.jackal.cowbeapp.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.jackal.cowbeapp.DataModel.Band;
+import com.jackal.cowbeapp.FacebookFunction;
 import com.jackal.cowbeapp.Interface.OnLoadMoreListener;
 import com.jackal.cowbeapp.MainActivity;
 import com.jackal.cowbeapp.R;
@@ -27,6 +29,7 @@ import com.jackal.cowbeapp.fragment.BandFeedDetailFragmentBottom;
 import com.jackal.cowbeapp.utility.Utility;
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -120,49 +123,13 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
         return viewHolder;
     }
 
-    static String result;
 
-    public void Like(String objID) {
-        new GraphRequest(
-                AccessToken.getCurrentAccessToken(),
-                "/" + objID + "/likes",
-                null,
-                HttpMethod.POST,
-                new GraphRequest.Callback() {
-                    public void onCompleted(GraphResponse response) {
-                         /* handle the result */
-                        JSONObject jsonObject = response.getJSONObject();
-                        try {
-
-                            result = jsonObject.getString("success");
-
-                            if (result == "true") {
-
-                                //viewHolder.changeLikeIconColor();
-                            } else
-                                Utility.logStatus("false");
-                        } catch (Exception ee) {
-
-                        }
-                    }
-                }
-        ).executeAsync();
-    }
-
-
-    public Band.Data getItem(int position) {
-        return feedData.get(position);
-    }
-
-    public ViewHolder holder2;
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-
-        Band.Data data = (Band.Data) feedData.get(position);
-
-
+        Band.Data data = feedData.get(position);
+        boolean HasLiked = data.getLikes().getSummary().getHasLiked();
+        Utility.logStatus(data.getId());
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
         if (imageLoader == null)
             imageLoader = AppController.getInstance().getImageLoader();
@@ -176,6 +143,16 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
             ((ViewHolder) holder).feed_date.setText(strDate);
             ((ViewHolder) holder).feed_likesCount.setText(String.valueOf(data.getLikes().getSummary().getTotalCount()));
             ((ViewHolder) holder).feed_commentCount.setText(String.valueOf(data.getComments().getSummary().getTotalCount()));
+
+
+            Utility.logStatus(data.getMessage() + " : " + String.valueOf(data.getLikes().getSummary().getHasLiked()));
+            if (HasLiked) {
+                ((ViewHolder) holder).feed_likeIcon
+                        .setColor(context.getResources().getColor(R.color.com_facebook_blue));
+            } else {
+                ((ViewHolder) holder).feed_likeIcon.setColor(Color.parseColor("gray"));
+            }
+
 
             holder.setIsRecyclable(false);
         } else {
@@ -211,17 +188,9 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
 
         NetworkImageView feed_full_picture;
 
-        TextView feed_message;
+        TextView feed_message,feed_date,feed_likesCount,feed_commentCount;
 
-        TextView feed_date;
-
-        IconicsImageView feed_likeIcon;
-
-        IconicsImageView feed_commentIcon;
-
-        TextView feed_likesCount;
-
-        TextView feed_commentCount;
+        IconicsImageView feed_likeIcon,feed_commentIcon;
 
         View mItemLayoutView;
 
@@ -241,6 +210,7 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
 
 
             feed_full_picture.setOnClickListener(this);
+            feed_message.setOnClickListener(this);
             feed_likeIcon.setOnClickListener(this);
             feed_likesCount.setOnClickListener(this);
             feed_commentIcon.setOnClickListener(this);
@@ -250,27 +220,76 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
-
             Utility.logStatus("onClick()  v.getId()" + v.getId());
-
-
+            Band.Data mData = feedData.get(getAdapterPosition());
+            boolean HasLiked = mData.getLikes().getSummary().getHasLiked();
+            Utility.logStatus(String.valueOf(HasLiked));
             if (mItemClickListener != null) {
                 mItemClickListener.onItemClick(v, getAdapterPosition());
-                if (v.getId() == feed_likeIcon.getId()) {
-                    //Change Text Color
-                    feed_likeIcon.setColor(v.getContext().getResources().getColor(R.color.com_facebook_blue));
-                } else if (v.getId() == feed_commentIcon.getId()) {
+                if (v.getId() == feed_likeIcon.getId() || v.getId() == feed_likesCount.getId()) {
+                    if (HasLiked) {
+                        Utility.logStatus("取消讚");
+
+                        new GraphRequest(
+                                AccessToken.getCurrentAccessToken(),
+                                "/" + mData.getId() + "/likes",
+                                null,
+                                HttpMethod.DELETE,
+                                new GraphRequest.Callback() {
+                                    public void onCompleted(GraphResponse response) {
+                                        try {
+                                            if (response.getJSONObject().get("success").equals(true)) {
+                                                feed_likeIcon.setColor(Color.parseColor("gray"));
+                                                refreshData();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                        ).executeAsync();
+                    } else {
+                        Utility.logStatus("點讚");
+
+                        new GraphRequest(
+                                AccessToken.getCurrentAccessToken(),
+                                "/" + mData.getId() + "/likes",
+                                null,
+                                HttpMethod.POST,
+                                new GraphRequest.Callback() {
+                                    public void onCompleted(GraphResponse response) {
+                                        try {
+                                            if (response.getJSONObject().get("success").equals(true)) {
+                                                feed_likeIcon
+                                                        .setColor(context.getResources().getColor(R.color.com_facebook_blue));
+
+                                                refreshData();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                        ).executeAsync();
+                    }
+
+
+                } else if (v.getId() == feed_commentIcon.getId() || v.getId() == feed_commentCount.getId()) {
 
                     //Launch Bottom Layout
                     MainActivity mainActivity = (MainActivity) v.getContext();
-                    BandFeedDetailFragmentBottom.newInstance(feedData.get(getAdapterPosition()).getId())
+                    BandFeedDetailFragmentBottom.newInstance(mData.getId())
                             .show(mainActivity.getSupportFragmentManager(), R.id.bottomsheet);
-                } else if (v.getId() == feed_full_picture.getId()) {
+
+                } else if (v.getId() == feed_full_picture.getId() || v.getId() == feed_message.getId()) {
+
+                    //Launch Detail fragment
                     MainActivity mainActivity = (MainActivity) v.getContext();
                     mainActivity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment, BandFeedDetailFragment.newInstance(feedData.get(getAdapterPosition()).getId(),
-                                    feedData.get(getAdapterPosition()).getFullPicture(),
-                                    feedData.get(getAdapterPosition()).getMessage(), ""))
+                            .replace(R.id.fragment, BandFeedDetailFragment.newInstance(
+                                    mData.getId(),
+                                    mData.getFullPicture(),
+                                    mData.getMessage()))
                             .addToBackStack("BandDetail")
                             .commit();
                 }
@@ -278,10 +297,8 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
             }
         }
 
-        public void changeLikeIconColor() {
-            IconicsImageView btn = (IconicsImageView) mItemLayoutView.findViewById(R.id.feed_likeIcon);
-            btn.setColor(mItemLayoutView.getContext().getResources().getColor(R.color.com_facebook_blue));
-
+        public void refreshData() {
+            //614689638666135_784222601712837
         }
 
     }

@@ -1,0 +1,160 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:visibility="visible">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fb_reaction_margin"
+            android:src="@mipmap/rec_like" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/fb_reaction_margin"
+            android:layout_marginLeft="@dimen/fb_reaction_margin"
+            android:layout_marginRight="@dimen/fb_reaction_margin"
+            android:layout_marginTop="@dimen/fb_reaction_margin_top"
+            android:gravity="center_horizontal"
+            android:text="20"
+            android:textColor="@color/colorGary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fb_reaction_margin"
+            android:src="@mipmap/rec_love" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/fb_reaction_margin"
+            android:layout_marginLeft="@dimen/fb_reaction_margin"
+            android:layout_marginRight="@dimen/fb_reaction_margin"
+            android:layout_marginTop="@dimen/fb_reaction_margin_top"
+            android:gravity="center_horizontal"
+            android:text="157"
+            android:textColor="@color/colorGary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fb_reaction_margin"
+            android:src="@mipmap/rec_haha" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/fb_reaction_margin"
+            android:layout_marginLeft="@dimen/fb_reaction_margin"
+            android:layout_marginRight="@dimen/fb_reaction_margin"
+            android:layout_marginTop="@dimen/fb_reaction_margin_top"
+            android:gravity="center_horizontal"
+            android:text="57"
+            android:textColor="@color/colorGary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fb_reaction_margin"
+            android:src="@mipmap/rec_wow" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/fb_reaction_margin"
+            android:layout_marginLeft="@dimen/fb_reaction_margin"
+            android:layout_marginRight="@dimen/fb_reaction_margin"
+            android:layout_marginTop="@dimen/fb_reaction_margin_top"
+            android:gravity="center_horizontal"
+            android:text="87"
+            android:textColor="@color/colorGary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fb_reaction_margin"
+            android:src="@mipmap/rec_sad" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/fb_reaction_margin"
+            android:layout_marginLeft="@dimen/fb_reaction_margin"
+            android:layout_marginRight="@dimen/fb_reaction_margin"
+            android:layout_marginTop="@dimen/fb_reaction_margin_top"
+            android:gravity="center_horizontal"
+            android:text="32"
+            android:textColor="@color/colorGary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fb_reaction_margin"
+            android:src="@mipmap/rec_anger" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/fb_reaction_margin"
+            android:layout_marginLeft="@dimen/fb_reaction_margin"
+            android:layout_marginRight="@dimen/fb_reaction_margin"
+            android:layout_marginTop="@dimen/fb_reaction_margin_top"
+            android:gravity="center_horizontal"
+            android:text="122"
+            android:textColor="@color/colorGary" />
+    </LinearLayout>
+
+
+</LinearLayout>

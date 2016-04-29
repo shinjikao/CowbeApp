@@ -67,16 +67,16 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter {
             viewHolder = new ViewHolder(itemLayoutView, CommentsData);
         }
 
-
         return viewHolder;
-
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        String url="";
-        if (CommentsData.get(position) != null){
-            url = CommentsData.get(position).getFrom().getPicture().getData().getUrl();
+        String url = "";
+        Comment.Datum data = null;
+        if (CommentsData.get(position) != null) {
+            data = CommentsData.get(position);
+            url = data.getFrom().getPicture().getData().getUrl();
         }
 
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
@@ -90,9 +90,9 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter {
                 url = "http://iconizer.net/files/Facebook/orig/genericfriendicon.png";
                 ((ViewHolder) holder).comment_user_picture.setImageUrl(url, imageLoader);
             }
-            ((ViewHolder) holder).comment_name.setText(CommentsData.get(position).getFrom().getName());
-            ((ViewHolder) holder).comment_message.setText(CommentsData.get(position).getMessage());
-            ((ViewHolder) holder).comment_likes.setText(String.valueOf(CommentsData.get(position).getLikeCount()));
+            ((ViewHolder) holder).comment_name.setText(data.getFrom().getName());
+            ((ViewHolder) holder).comment_message.setText(data.getMessage());
+            ((ViewHolder) holder).comment_likes.setText(String.valueOf(data.getLikeCount()));
         } else {
             ((MessageViewHolder) holder).textView.setText(Message);
         }
