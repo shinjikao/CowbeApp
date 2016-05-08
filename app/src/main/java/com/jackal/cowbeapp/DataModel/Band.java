@@ -20,33 +20,16 @@ public class Band {
 
     public Cover getCover() { return this.cover; }
 
-    public void setCover(Cover cover) { this.cover = cover; }
-
-
     public Engagement getEngagement() { return this.engagement; }
-
-    public void setEngagement(Engagement engagement) { this.engagement = engagement; }
-
 
     public String getName() { return this.name; }
 
-    public void setName(String name) { this.name = name; }
-
-
     public Feed getFeed() { return this.feed; }
-
-    public void setFeed(Feed feed) { this.feed = feed; }
-
 
     public String getId() { return this.id; }
 
-    public void setId(String id) { this.id = id; }
-
-
 
     public Picture getPicture() { return this.picture; }
-
-    public void setPicture(Picture picture) { this.picture = picture; }
 
     public class Cover
     {

@@ -29,17 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        ButterKnife.bind(this);
-
-
-
-
 
     }
 
@@ -47,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Utility.logStatus(" MainActivity onResume()");
-        NetworkImageView mNetworkImageView = (NetworkImageView) findViewById(R.id.feed_cover);
-        mNetworkImageView.setImageUrl("http://c2.staticflickr.com/4/3353/3518135305_79b7cbe233_z.jpg", imageLoader);
+//        NetworkImageView mNetworkImageView = (NetworkImageView) findViewById(R.id.feed_cover);
+//        mNetworkImageView.setImageUrl("http://c2.staticflickr.com/4/3353/3518135305_79b7cbe233_z.jpg", imageLoader);
         // Logs 'install' and 'app activate' App Events.
         AppEventsLogger.activateApp(this);
     }
@@ -77,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case android.R.id.home:
                 onBackPressed();
-                NetworkImageView mNetworkImageView = (NetworkImageView) findViewById(R.id.feed_cover);
-                mNetworkImageView.setImageUrl("http://c2.staticflickr.com/4/3353/3518135305_79b7cbe233_z.jpg", imageLoader);
+//                NetworkImageView mNetworkImageView = (NetworkImageView) findViewById(R.id.feed_cover);
+//                mNetworkImageView.setImageUrl("http://c2.staticflickr.com/4/3353/3518135305_79b7cbe233_z.jpg", imageLoader);
                 return true;
             case R.id.action_settings:
                 return true;

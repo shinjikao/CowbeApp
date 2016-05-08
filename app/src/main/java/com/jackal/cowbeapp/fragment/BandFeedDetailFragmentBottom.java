@@ -93,7 +93,7 @@ public class BandFeedDetailFragmentBottom extends BottomSheetFragment {
                         try {
                             Comment comments = new Gson().fromJson(response.getJSONObject().toString(), Comment.class);
 
-                            CustomRecyclerView.setLayoutManager(getActivity(), mRecycViewFeedComment, "VERTICAL");
+                            CustomRecyclerView.setLayoutManager(getActivity(), mRecycViewFeedComment, "VERTICAL",0);
 
                             setRecyclerView(comments.getComments().getData());
                         } catch (Exception ex) {

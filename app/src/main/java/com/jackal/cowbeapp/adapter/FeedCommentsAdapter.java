@@ -2,6 +2,7 @@ package com.jackal.cowbeapp.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,6 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter {
             return VIEW_HEADER;
         else
             return VIEW_NORMAL;
-
     }
 
     @Override
@@ -141,6 +141,7 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter {
 
         public MessageViewHolder(View v) {
             super(v);
+
             textView = (TextView) v.findViewById(R.id.tv_message);
 
         }

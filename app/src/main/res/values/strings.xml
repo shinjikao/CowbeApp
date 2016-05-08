@@ -12,6 +12,42 @@
     <string name="Read_me">使用說明</string>
     <string name="Rate_it">給予支持</string>
 
+    <string-array name="CowbeGossip">
+        <item>kaobeiTDE</item>
+        <item>helldamnboss</item>
+        <item>cowbalien</item>
+        <item>thes3xofcowbear</item>
+    </string-array>
+    <string-array name="CowbeBoyAndGirl">
+        <item>KaoBeiJoke</item>
+        <item>kobeengineer</item>
+        <item>287527004749149</item>
+        <item>1415333978752489</item>
+    </string-array>
+
+    <string-array name="CowbeJob">
+        <item>cowbeistartups</item>
+        <item>kboutk</item>
+        <item>kaobeihusband</item>
+        <item>kaobeiwife</item>
+    </string-array>
+    <string-array name="CowbeCampus">
+        <item>kaobeiyou</item>
+        <item>cowbanursing</item>
+        <item>903473626385697</item>
+        <item>563212453789705</item>
+    </string-array>
+    <string-array name="CowbeFunny">
+        <item>complainBoyfriend</item>
+        <item>cowbaymotherinlaw</item>
+        <item>cowacc</item>
+        <item>1507004499528332</item>
+    </string-array>
+
+
+
+
+
 
     <string name="title_activity_custom_intro">歡迎使用靠北App</string>
     <string-array name="fb_permission">

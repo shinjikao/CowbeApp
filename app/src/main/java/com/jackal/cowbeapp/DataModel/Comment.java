@@ -9,11 +9,12 @@ public class Comment {
     private String full_picture;
     private Comments comments;
     private String id;
+    private String message;
 
     public String getFullPicture() { return this.full_picture; }
     public Comments getComments() { return this.comments; }
     public String getId() { return this.id; }
-
+    public String getMessage(){return this.message;}
 
 
     public class Data

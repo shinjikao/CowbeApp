@@ -26,6 +26,7 @@ import com.jackal.cowbeapp.R;
 import com.jackal.cowbeapp.app.AppController;
 import com.jackal.cowbeapp.fragment.BandFeedDetailFragment;
 import com.jackal.cowbeapp.fragment.BandFeedDetailFragmentBottom;
+import com.jackal.cowbeapp.fragment.BandFeedFragment;
 import com.jackal.cowbeapp.utility.Utility;
 import com.mikepenz.iconics.view.IconicsImageView;
 
@@ -55,7 +56,6 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
     public OnItemClickListener mItemClickListener;
-
 
     public BandFeedsAdapter(Context context, ArrayList<Band.Data> feedData) {
         this(context, feedData, null);
@@ -105,8 +105,6 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-
         RecyclerView.ViewHolder viewHolder;
 
         if (viewType == VIEW_ITEM) {
@@ -124,10 +122,11 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
     }
 
 
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Band.Data data = feedData.get(position);
+
+        if (data == null) return;
         boolean HasLiked = data.getLikes().getSummary().getHasLiked();
         Utility.logStatus(data.getId());
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
@@ -188,9 +187,9 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
 
         NetworkImageView feed_full_picture;
 
-        TextView feed_message,feed_date,feed_likesCount,feed_commentCount;
+        TextView feed_message, feed_date, feed_likesCount, feed_commentCount;
 
-        IconicsImageView feed_likeIcon,feed_commentIcon;
+        IconicsImageView feed_likeIcon, feed_commentIcon;
 
         View mItemLayoutView;
 
@@ -221,7 +220,9 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             Utility.logStatus("onClick()  v.getId()" + v.getId());
+
             Band.Data mData = feedData.get(getAdapterPosition());
+            Utility.logStatus(mData.getMessage());
             boolean HasLiked = mData.getLikes().getSummary().getHasLiked();
             Utility.logStatus(String.valueOf(HasLiked));
             if (mItemClickListener != null) {
@@ -273,17 +274,15 @@ public class BandFeedsAdapter extends RecyclerView.Adapter {
                         ).executeAsync();
                     }
 
-
                 } else if (v.getId() == feed_commentIcon.getId() || v.getId() == feed_commentCount.getId()) {
-
                     //Launch Bottom Layout
                     MainActivity mainActivity = (MainActivity) v.getContext();
                     BandFeedDetailFragmentBottom.newInstance(mData.getId())
                             .show(mainActivity.getSupportFragmentManager(), R.id.bottomsheet);
 
                 } else if (v.getId() == feed_full_picture.getId() || v.getId() == feed_message.getId()) {
-
                     //Launch Detail fragment
+                    BandFeedFragment.positionTag =getAdapterPosition();
                     MainActivity mainActivity = (MainActivity) v.getContext();
                     mainActivity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment, BandFeedDetailFragment.newInstance(

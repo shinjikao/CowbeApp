@@ -35,17 +35,12 @@ import java.util.ArrayList;
  * Created by jackalkao on 2/24/16.
  */
 public class BandFeedFragment extends Fragment {
-
     BottomSheetLayout bottomSheetLayout;
-
     private String id;
-
+    private String cover;
     private RecyclerView mRecyclerView;
-
     private Band band;
-
     private String Next;
-
     private String until;
     private ArrayList<Band.Data> Data;
 
@@ -55,10 +50,13 @@ public class BandFeedFragment extends Fragment {
 
     private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
-    public static BandFeedFragment newInstance(String id) {
+    public static int positionTag = 0;
+
+    public static BandFeedFragment newInstance(String id,String cover) {
         BandFeedFragment myFragment = new BandFeedFragment();
         Bundle args = new Bundle();
         args.putString("ID", id);
+        args.putString("COVER", cover);
         myFragment.setArguments(args);
 
         return myFragment;
@@ -68,6 +66,7 @@ public class BandFeedFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         this.id = getArguments().getString("ID", "");
+        this.cover = getArguments().getString("COVER", "");
         Log.d(MainActivity.TAG, id);
 
         super.onCreate(savedInstanceState);
@@ -93,6 +92,9 @@ public class BandFeedFragment extends Fragment {
         this.view = view;
         startRequest(view);
 
+        NetworkImageView mCover = (NetworkImageView) view.findViewById(R.id.feed_cover);
+        mCover.setImageUrl(this.cover ,imageLoader);
+
 
     }
 
@@ -106,15 +108,15 @@ public class BandFeedFragment extends Fragment {
                     public void onCompleted(GraphResponse response) {
                         try {
                             band = new Gson().fromJson(response.getJSONObject().toString(), Band.class);
-                            String Cover = band.getCover().getSource();
+
 
                             Next = band.getFeed().getPaging().getNext();
                             until = Next.substring(Next.indexOf("until=") + 6).split("&")[0];
                             Utility.logStatus("until " + until);
 
-                            CustomRecyclerView.setLayoutManager(getActivity(), mRecyclerView, "VERTICAL");
+                            CustomRecyclerView.setLayoutManager(getActivity(), mRecyclerView, "VERTICAL",positionTag);
 
-                            setRecyclerView(band.getFeed().getData(), view, Cover);
+                            setRecyclerView(band.getFeed().getData(), view);
 
 
                         } catch (Exception ex) {
@@ -179,15 +181,13 @@ public class BandFeedFragment extends Fragment {
 
     BandFeedsAdapter adapter;
 
-    public void setRecyclerView(final ArrayList<Band.Data> FeedData, View view, final String cover) {
-
-        NetworkImageView mNetworkImageView = (NetworkImageView)getActivity().findViewById(R.id.feed_cover);
-        mNetworkImageView.setImageUrl(cover,imageLoader);
+    public void setRecyclerView(final ArrayList<Band.Data> FeedData, View view) {
         Data = FeedData;
         adapter = new BandFeedsAdapter(getContext(), FeedData, mRecyclerView);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setHasFixedSize(true);
+
         bottomSheetLayout.setPeekSheetTranslation(view.getHeight() - 200);
 
         adapter.setOnLoadMoreListener(new OnLoadMoreListener() {

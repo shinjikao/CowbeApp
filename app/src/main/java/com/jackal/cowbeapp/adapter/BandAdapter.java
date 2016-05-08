@@ -47,11 +47,7 @@ public class BandAdapter extends RecyclerView.Adapter<BandAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-
-
         holder.txt_bandName.setText(bands.get(position).getName());
-
-
         String url = bands.get(position).getPicture().getData().getUrl();
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
         if (imageLoader == null)
@@ -60,18 +56,18 @@ public class BandAdapter extends RecyclerView.Adapter<BandAdapter.ViewHolder> {
         holder.txt_bandPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String id = bands.get(position).getId();
+                String cover=bands.get(position).getCover().getSource();
 
                 //call MainActivity switch fragment
                 MainActivity mainActivity = (MainActivity) context;
                 mainActivity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment, BandFeedFragment.newInstance( bands.get(position).getId()))
+                        .replace(R.id.fragment, BandFeedFragment.newInstance(id ,cover ))
                         .addToBackStack("Band")
                         .commit();
 
             }
         });
-
-
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -82,13 +78,11 @@ public class BandAdapter extends RecyclerView.Adapter<BandAdapter.ViewHolder> {
 
         ArrayList<Band> bands;
 
-
         public ViewHolder(View itemLayoutView, ArrayList<Band> bands) {
             super(itemLayoutView);
             this.bands = bands;
             txt_bandName = (TextView) itemLayoutView.findViewById(R.id.item_title);
             txt_bandPicture = (NetworkImageView) itemLayoutView.findViewById(R.id.item_icon);
-
         }
 
         @Override

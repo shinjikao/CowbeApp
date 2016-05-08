@@ -2,6 +2,7 @@ package com.jackal.cowbeapp.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -62,8 +63,8 @@ public class BandFeedDetailFragment extends Fragment {
         this.Message = getArguments().getString("MESSAGE", "");
 
         Log.d(MainActivity.TAG, id);
-
-
+        Log.d(MainActivity.TAG,"A"+ FullPicture);
+        Log.d(MainActivity.TAG, Message);
         super.onCreate(savedInstanceState);
     }
 
@@ -73,11 +74,26 @@ public class BandFeedDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bandfeed_detail, container, false);
-        r_feedComment = (RecyclerView) view.findViewById(R.id.r_bandfeed);
-        NetworkImageView mNetworkImageView = (NetworkImageView) getActivity().findViewById(R.id.feed_cover);
-        mNetworkImageView.setImageUrl(this.FullPicture, imageLoader);
-        startRequest();
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        r_feedComment = (RecyclerView) view.findViewById(R.id.r_bandfeed);
+        AppBarLayout appbar = (AppBarLayout)view.findViewById(R.id.appbar);
+
+        startRequest();
+        Log.d(MainActivity.TAG, String.valueOf(!FullPicture.isEmpty()));
+        if(!FullPicture.isEmpty()){
+            NetworkImageView mNetworkImageView = (NetworkImageView) view.findViewById(R.id.feed_cover);
+            mNetworkImageView.setImageUrl(this.FullPicture, imageLoader);
+        }else{
+            appbar.setExpanded(false);
+            appbar.setMinimumHeight(0);
+
+        }
     }
 
     public void startRequest() {
@@ -91,11 +107,16 @@ public class BandFeedDetailFragment extends Fragment {
                         try {
                             Comment comments = new Gson().fromJson(response.getJSONObject().toString(), Comment.class);
 
-                            CustomRecyclerView.setLayoutManager(getActivity(), r_feedComment, "VERTICAL");
+                            CustomRecyclerView.setLayoutManager(getActivity(), r_feedComment, "VERTICAL",0);
 
-                            setRecyclerView(comments.getComments().getData(), Message);
+                            if(comments.getComments()!=null){
+                                setRecyclerView(comments.getComments().getData(), Message);
+                            }else{
+                                setRecyclerView(null, Message);
+                            }
 
                         } catch (Exception ex) {
+                            Log.e(MainActivity.TAG, ex.getMessage());
                             Log.e(MainActivity.TAG, response.toString());
 
                         }
@@ -103,7 +124,7 @@ public class BandFeedDetailFragment extends Fragment {
                 });
 
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "full_picture,comments.limit(200){from{name,picture.type(normal)},message,user_likes,comment_count,like_count}");
+        parameters.putString("fields", "full_picture,comments.limit(10){from{name,picture.type(normal)},message,user_likes,comment_count,like_count},message");
         request.setParameters(parameters);
         request.executeAsync();
     }
@@ -112,7 +133,7 @@ public class BandFeedDetailFragment extends Fragment {
 
         ArrayList<Comment.Datum> mData = new ArrayList<Comment.Datum>();
         mData.add(null);
-        mData.addAll(data);
+        if(data!=null )mData.addAll(data);
 
         FeedCommentsAdapter adapter = new FeedCommentsAdapter(mData, Message);
         r_feedComment.setAdapter(adapter);
