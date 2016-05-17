@@ -12,7 +12,11 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.jackal.cowbeapp.app.AppController;
+import com.jackal.cowbeapp.fragment.BandFeedDetailFragment;
+import com.jackal.cowbeapp.fragment.BandFeedFragment;
+import com.jackal.cowbeapp.fragment.BandFragment;
 import com.jackal.cowbeapp.fragment.FacebookLoginFragment;
+import com.jackal.cowbeapp.fragment.MainActivityFragment;
 import com.jackal.cowbeapp.utility.Utility;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -21,23 +25,20 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
     public static String TAG = "JACKAL";
-    private ImageLoader imageLoader = AppController.getInstance().getImageLoader();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookSdk.sdkInitialize(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment, new BandFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Utility.logStatus(" MainActivity onResume()");
-//        NetworkImageView mNetworkImageView = (NetworkImageView) findViewById(R.id.feed_cover);
-//        mNetworkImageView.setImageUrl("http://c2.staticflickr.com/4/3353/3518135305_79b7cbe233_z.jpg", imageLoader);
         // Logs 'install' and 'app activate' App Events.
         AppEventsLogger.activateApp(this);
     }

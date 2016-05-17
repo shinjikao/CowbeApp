@@ -30,7 +30,6 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter {
     private final int VIEW_NORMAL = 1;
     private final int VIEW_FOOTER = 1;
     private String Message;
-
     private ArrayList<Comment.Datum> CommentsData;
     private Context context;
 
@@ -38,6 +37,7 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter {
     public FeedCommentsAdapter(ArrayList<Comment.Datum> CommentsData, String Message) {
         this.CommentsData = CommentsData;
         this.Message = Message;
+
     }
 
     @Override
@@ -64,7 +64,7 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter {
             viewHolder = new MessageViewHolder(itemLayoutView);
         } else {
             View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_feed_data_comment, null);
-            viewHolder = new ViewHolder(itemLayoutView, CommentsData);
+            viewHolder = new ViewHolder(itemLayoutView);
         }
 
         return viewHolder;
@@ -104,23 +104,13 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter {
 
         NetworkImageView comment_user_picture;
 
-        TextView comment_name;
-
-        TextView comment_message;
-
-        TextView comment_likes;
-
-        TextView feed_commentCount;
-
-        ArrayList<Comment.Datum> CommentsData;
+        TextView comment_name,comment_message,comment_likes ,feed_commentCount;
 
         View itemLayoutView;
 
-        public ViewHolder(View itemLayoutView, ArrayList<Comment.Datum> CommentsData) {
+        public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             this.itemLayoutView = itemLayoutView;
-            this.CommentsData = CommentsData;
-
 
             comment_user_picture = (NetworkImageView) itemLayoutView.findViewById(R.id.comment_user_picture);
             comment_name = (TextView) itemLayoutView.findViewById(R.id.comment_name);
@@ -141,7 +131,6 @@ public class FeedCommentsAdapter extends RecyclerView.Adapter {
 
         public MessageViewHolder(View v) {
             super(v);
-
             textView = (TextView) v.findViewById(R.id.tv_message);
 
         }

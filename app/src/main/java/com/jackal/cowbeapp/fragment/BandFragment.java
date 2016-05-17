@@ -2,26 +2,27 @@ package com.jackal.cowbeapp.fragment;
 
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.google.gson.Gson;
-import com.jackal.cowbeapp.CustomRecyclerView;
-import com.jackal.cowbeapp.DataModel.Band;
-import com.jackal.cowbeapp.MainActivity;
 import com.jackal.cowbeapp.R;
-import com.jackal.cowbeapp.adapter.BandAdapter;
 import com.jackal.cowbeapp.utility.Utility;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,110 +30,157 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class BandFragment extends Fragment {
-    private String[] bandList;
-    private ArrayList<Band> bands = new ArrayList();
-    private RecyclerView mRecyclerView;
+    Toolbar toolBar;
     // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private static final String ARG_PARAM3 = "param3";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private String[] mParam3;
-
-
     public BandFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @param param3 Parameter 3.
-     * @return A new instance of fragment BandFragment.
-     */
     // TODO: Rename and change types and number of parameters
-    public static BandFragment newInstance(String param1, String param2 ,String[] param3) {
+    public static BandFragment newInstance() {
         BandFragment fragment = new BandFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        args.putStringArray(ARG_PARAM3, param3);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Utility.logStatus("onCreate()");
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-            mParam3 = getArguments().getStringArray(ARG_PARAM3);
-            bandList = mParam3;
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        Utility.logStatus("onCreateView()");
         return inflater.inflate(R.layout.fragment_band, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Utility.logStatus("onActivityCreated()");
+    }
+
+    protected Toolbar setupToolBar(AppCompatActivity a) {
+        toolBar = (Toolbar) getView().findViewById(R.id.maintoolbar);
+
+        if (toolBar == null) return null;
+
+        a.setSupportActionBar(toolBar);
+        a.getSupportActionBar().setTitle("");
+        a.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        return toolBar;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Utility.logStatus("onViewCreated()");
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.r_view);
-        Utility.logStatus("???" + mParam1);
-        startRequest();
+        setupToolBar((AppCompatActivity) getActivity());
+
+        ViewPager viewPager = (ViewPager) getView().findViewById(R.id.viewPager);
+        CreateViewPager(viewPager);
+
+        TabLayout tabLayout = (TabLayout) getView().findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        Toast.makeText(getContext(), "position=" + position, Toast.LENGTH_SHORT).show();
+                        setToolBarTitle((AppCompatActivity) getActivity(), "八卦");
+                        break;
+                    case 1:
+                        Toast.makeText(getContext(), "position=" + position, Toast.LENGTH_SHORT).show();
+                        setToolBarTitle((AppCompatActivity) getActivity(), "男女");
+                        break;
+                    case 2:
+                        Toast.makeText(getContext(), "position=" + position, Toast.LENGTH_SHORT).show();
+                        setToolBarTitle((AppCompatActivity) getActivity(), "職場");
+                        break;
+                    case 3:
+                        Toast.makeText(getContext(), "position=" + position, Toast.LENGTH_SHORT).show();
+                        setToolBarTitle((AppCompatActivity) getActivity(), "校園");
+                        break;
+                    case 4:
+                        Toast.makeText(getContext(), "position=" + position, Toast.LENGTH_SHORT).show();
+                        setToolBarTitle((AppCompatActivity) getActivity(), "娛樂");
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        setupToolBar((AppCompatActivity) getActivity());
 
     }
-    public static String str2;
 
-    public void startRequest() {
-        Utility.logStatus(String.valueOf(bandList.length));
-        for (String str : bandList) {
+    public void CreateViewPager(ViewPager viewPager) {
+        String CowbeGossip[] = getResources().getStringArray(R.array.CowbeGossip);
+        String CowbeBoyAndGirl[] = getResources().getStringArray(R.array.CowbeBoyAndGirl);
+        String CowbeJob[] = getResources().getStringArray(R.array.CowbeJob);
+        String CowbeFunny[] = getResources().getStringArray(R.array.CowbeFunny);
+        String CowbeCampus[] = getResources().getStringArray(R.array.CowbeCampus);
 
-            str2 = str;
-            GraphRequest request = GraphRequest.newGraphPathRequest(
-                    AccessToken.getCurrentAccessToken(),
-                    "/" + str,
-                    new GraphRequest.Callback() {
-                        @Override
-                        public void onCompleted(GraphResponse response) {
-                            try {
-                                Band band = new Gson().fromJson(response.getJSONObject().toString(), Band.class);
+        ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
+        pagerAdapter.addFrag(BandPagerFragment.newInstance("八卦", "", CowbeGossip), "八卦");
+        pagerAdapter.addFrag(BandPagerFragment.newInstance("男女", "", CowbeBoyAndGirl), "男女");
+        pagerAdapter.addFrag(BandPagerFragment.newInstance("職場", "", CowbeJob), "職場");
+        pagerAdapter.addFrag(BandPagerFragment.newInstance("娛樂", "", CowbeFunny), "娛樂");
+        pagerAdapter.addFrag(BandPagerFragment.newInstance("校園", "", CowbeCampus), "校園");
 
-                                bands.add(band);
+        viewPager.setAdapter(pagerAdapter);
 
-                                CustomRecyclerView.setLayoutManager(getActivity(), mRecyclerView, "GRID", 0);
+    }
 
-                                SetRecyclerView(bands);
-                            } catch (Exception ex) {
-                                Log.e(MainActivity.TAG, response.toString());
-                                Log.e(MainActivity.TAG, str2);
-                            }
-                        }
-                    });
+    protected Toolbar setToolBarTitle(AppCompatActivity a, String title) {
+        toolBar = (Toolbar) getView().findViewById(R.id.toolbar);
+        if (toolBar == null) return null;
+        a.setSupportActionBar(toolBar);
+        a.getSupportActionBar().setTitle(title);
+        a.getSupportActionBar().setDisplayShowTitleEnabled(false);
+        return toolBar;
+    }
 
-            Bundle parameters = new Bundle();
-            parameters.putString("fields", "cover,engagement,name, picture.width(300).height(300){url}");
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
-            request.setParameters(parameters);
-            request.executeAsync();
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFrag(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
         }
     }
-    public void SetRecyclerView(ArrayList<Band> data) {
-        BandAdapter adapter = new BandAdapter(data);
-        mRecyclerView.setAdapter(adapter);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-    }
+
+
 }

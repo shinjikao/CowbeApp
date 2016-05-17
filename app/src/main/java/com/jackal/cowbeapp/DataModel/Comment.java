@@ -10,12 +10,26 @@ public class Comment {
     private Comments comments;
     private String id;
     private String message;
+    private Haha haha;
+    private Love love;
+    private Wow wow;
+    private Like like;
+    private Sad sad;
+    private Angry angry;
+
+
+
 
     public String getFullPicture() { return this.full_picture; }
     public Comments getComments() { return this.comments; }
     public String getId() { return this.id; }
     public String getMessage(){return this.message;}
-
+    public Haha getHaha() { return this.haha; }
+    public Love getLove() { return this.love; }
+    public Wow getWow() { return this.wow; }
+    public Like getLike() { return this.like; }
+    public Sad getSad() { return this.sad; }
+    public Angry getAngry() { return this.angry; }
 
     public class Data
     {
@@ -112,7 +126,101 @@ public class Comment {
 
     }
 
+    public class Summary
+    {
+        private int total_count;
+        private String viewer_reaction;
 
+        public int getTotalCount() { return this.total_count; }
 
+        public void setTotalCount(int total_count) { this.total_count = total_count; }
 
+        public String getViewerReaction() { return this.viewer_reaction; }
+
+        public void setViewerReaction(String viewer_reaction) { this.viewer_reaction = viewer_reaction; }
+    }
+    public class Haha
+    {
+        private ArrayList<Object> data;
+
+        public ArrayList<Object> getData() { return this.data; }
+
+        public void setData(ArrayList<Object> data) { this.data = data; }
+
+        private Summary summary;
+
+        public Summary getSummary() { return this.summary; }
+
+        public void setSummary(Summary summary) { this.summary = summary; }
+    }
+    public class Love
+    {
+        private ArrayList<Object> data;
+
+        public ArrayList<Object> getData() { return this.data; }
+
+        public void setData(ArrayList<Object> data) { this.data = data; }
+
+        private Summary summary;
+
+        public Summary getSummary() { return this.summary; }
+
+        public void setSummary(Summary summary) { this.summary = summary; }
+    }
+    public class Wow
+    {
+        private ArrayList<Object> data;
+
+        public ArrayList<Object> getData() { return this.data; }
+
+        public void setData(ArrayList<Object> data) { this.data = data; }
+
+        private Summary summary;
+
+        public Summary getSummary() { return this.summary; }
+
+        public void setSummary(Summary summary) { this.summary = summary; }
+    }
+    public class Like
+    {
+        private ArrayList<Object> data;
+
+        public ArrayList<Object> getData() { return this.data; }
+
+        public void setData(ArrayList<Object> data) { this.data = data; }
+
+        private Summary summary;
+
+        public Summary getSummary() { return this.summary; }
+
+        public void setSummary(Summary summary) { this.summary = summary; }
+    }
+    public class Sad
+    {
+        private ArrayList<Object> data;
+
+        public ArrayList<Object> getData() { return this.data; }
+
+        public void setData(ArrayList<Object> data) { this.data = data; }
+
+        private Summary summary;
+
+        public Summary getSummary() { return this.summary; }
+
+        public void setSummary(Summary summary) { this.summary = summary; }
+    }
+    public class Angry
+    {
+        private ArrayList<Object> data;
+
+        public ArrayList<Object> getData() { return this.data; }
+
+        public void setData(ArrayList<Object> data) { this.data = data; }
+
+        private Summary summary;
+
+        public Summary getSummary() { return this.summary; }
+
+        public void setSummary(Summary summary) { this.summary = summary; }
+    }
 }

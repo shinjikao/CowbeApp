@@ -32,11 +32,13 @@
                 android:scaleType="fitXY"
                 app:layout_collapseMode="parallax" />
 
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+            </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
 
 
@@ -56,9 +58,8 @@
             >
 
             <include layout="@layout/fb_reactions_layout" />
-
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/r_bandfeed"
+                android:id="@+id/r_bandfeed_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/cardview_light_background"

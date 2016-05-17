@@ -9,8 +9,6 @@
         android:title="@string/Login"
         app:showAsAction="collapseActionView|ifRoom" />
 
-
-
     <item
         android:id="@+id/filter"
         android:title="@string/filter"

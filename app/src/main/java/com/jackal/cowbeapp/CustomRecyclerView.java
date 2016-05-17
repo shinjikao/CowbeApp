@@ -13,11 +13,11 @@ public class CustomRecyclerView {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         if (Direct == "HORIZONTAL") {
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            layoutManager.scrollToPosition(Position);
+            layoutManager.scrollToPosition(0);
             recyclerView.setLayoutManager(layoutManager);
         } else if (Direct == "VERTICAL") {
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            layoutManager.scrollToPosition(Position);
+            layoutManager.scrollToPosition(0);
             recyclerView.setLayoutManager(layoutManager);
         } else if (Direct == "GRID") {
             recyclerView.setLayoutManager(new GridLayoutManager(context,3));

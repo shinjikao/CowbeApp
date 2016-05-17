@@ -82,7 +82,6 @@ public class BandFeedFragment extends Fragment {
 
         bottomSheetLayout = (BottomSheetLayout) view.findViewById(R.id.bottomsheet);
         bottomSheetLayout.setPeekOnDismiss(true);
-
         return view;
     }
 
@@ -91,11 +90,8 @@ public class BandFeedFragment extends Fragment {
         super.onViewCreated(view, bundle);
         this.view = view;
         startRequest(view);
-
         NetworkImageView mCover = (NetworkImageView) view.findViewById(R.id.feed_cover);
         mCover.setImageUrl(this.cover ,imageLoader);
-
-
     }
 
     public void startRequest(final View view) {
@@ -128,7 +124,6 @@ public class BandFeedFragment extends Fragment {
 
         Bundle parameters = new Bundle();
         parameters.putString("fields", "cover,engagement,name,feed.limit(10){picture,link,full_picture,likes.limit(0).summary(true),comments.limit(0).summary(true),message,created_time}");
-        //parameters.putString("fields", "cover,engagement,name,feed{picture,link,full_picture,likes.limit(0).summary(true),comments.limit(0).summary(true),message,created_time}");
         request.setParameters(parameters);
         request.executeAsync();
 
